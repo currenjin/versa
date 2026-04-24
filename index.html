@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Versa — 지금 이 곡의 가사를, 당신의 언어로</title>
-<meta name="description" content="Mac 메뉴바에서 Spotify · Apple Music 재생곡을 실시간 싱크로 띄우고 9개 언어로 번역하는 앱.">
+<meta name="description" content="Mac 메뉴바에서 Spotify · Apple Music 재생곡의 가사를 실시간 싱크로 띄우고 9개 언어로 번역하는 앱.">
 
 <meta property="og:title" content="Versa — 메뉴바에서 펼쳐지는 실시간 가사 · 번역">
-<meta property="og:description" content="Spotify · Apple Music 재생곡을 싱크로 띄우고, 곡이 시작되기 전에 번역까지 끝나 있습니다.">
+<meta property="og:description" content="Spotify · Apple Music 재생곡을 싱크 가사로 띄우고, 곡이 시작되기도 전에 번역을 준비합니다.">
 <meta property="og:image" content="https://currenjin.github.io/versa/assets/icon.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -42,6 +42,10 @@ body {
     overflow-x: hidden;
 }
 a { color: inherit; }
+
+/* ---------------- i18n ---------------- */
+html[lang="ko"] [data-lang="en"] { display: none !important; }
+html[lang="en"] [data-lang="ko"] { display: none !important; }
 
 /* ---------------- nav ---------------- */
 nav {
@@ -78,13 +82,13 @@ nav {
     align-items: center;
     gap: 22px;
 }
-.nav-links a {
+.nav-links > a {
     color: var(--fg-muted);
     font-size: 14px;
     text-decoration: none;
     transition: color 0.15s;
 }
-.nav-links a:hover { color: var(--fg); }
+.nav-links > a:hover { color: var(--fg); }
 .nav-cta {
     padding: 8px 16px;
     background: var(--fg);
@@ -94,8 +98,38 @@ nav {
     font-size: 13px !important;
 }
 .nav-cta:hover { background: #fff !important; color: var(--bg) !important; }
+
+.lang-toggle {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+}
+.lang-toggle button {
+    background: transparent;
+    border: 0;
+    color: var(--fg-dim);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    font-family: inherit;
+    line-height: 1;
+}
+.lang-toggle button:hover { color: var(--fg-muted); }
+.lang-toggle button.active {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--fg);
+}
+
 @media (max-width: 640px) {
-    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links > a:not(.nav-cta) { display: none; }
+    .nav-inner { gap: 8px; }
 }
 
 /* ---------------- layout ---------------- */
@@ -245,7 +279,7 @@ h1 {
     flex-wrap: wrap;
     gap: 10px;
 }
-.meta span:not(:last-child)::after {
+.meta > span:not(:last-child)::after {
     content: "·";
     margin-left: 10px;
     color: var(--fg-dim);
@@ -597,10 +631,16 @@ footer {
             <span>Versa</span>
         </a>
         <div class="nav-links">
-            <a href="#features">특징</a>
-            <a href="#install">설치</a>
+            <a href="#features"><span data-lang="ko">기능</span><span data-lang="en">Features</span></a>
+            <a href="#install"><span data-lang="ko">설치</span><span data-lang="en">Install</span></a>
             <a href="#faq">FAQ</a>
-            <a class="nav-cta" href="https://github.com/currenjin/versa/releases/latest">다운로드</a>
+            <div class="lang-toggle" role="group" aria-label="Language">
+                <button type="button" data-set-lang="ko">KO</button>
+                <button type="button" data-set-lang="en">EN</button>
+            </div>
+            <a class="nav-cta" href="https://github.com/currenjin/versa/releases/latest">
+                <span data-lang="ko">다운로드</span><span data-lang="en">Download</span>
+            </a>
         </div>
     </div>
 </nav>
@@ -618,21 +658,27 @@ footer {
                 <span class="dot"></span>
                 Pre-release · v0.1.1
             </div>
-            <h1>메뉴바에서 펼쳐지는<br>실시간 가사 · 번역.</h1>
+            <h1>
+                <span data-lang="ko">메뉴바에서 펼쳐지는<br>실시간 가사 · 번역.</span>
+                <span data-lang="en">Live lyrics and translation,<br>right in your menu bar.</span>
+            </h1>
             <p class="hero-lead">
-                Spotify · Apple Music 재생곡의 가사를 싱크로 띄우고, 곡이 시작되기 전에 9개 언어 번역까지 끝나 있습니다.
+                <span data-lang="ko">Spotify · Apple Music 재생곡을 싱크 가사로 띄우고, 곡이 시작되기도 전에 9개 언어 번역을 준비합니다.</span>
+                <span data-lang="en">Versa shows synced lyrics for whatever's playing on Spotify or Apple Music, and pre-translates every line in 9 languages before the song even starts.</span>
             </p>
             <div class="cta">
                 <a class="btn btn-primary" href="https://github.com/currenjin/versa/releases/latest">
                     <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1v9.3l3.1-3.1 1.1 1.1L8 12.5 3.8 8.3l1.1-1.1L8 10.3V1h0zM2 13h12v2H2z"/></svg>
-                    Mac 에서 다운로드
+                    <span data-lang="ko">Mac 용 다운로드</span><span data-lang="en">Download for Mac</span>
                 </a>
-                <a class="btn btn-ghost" href="#install">설치 안내</a>
+                <a class="btn btn-ghost" href="#install">
+                    <span data-lang="ko">설치 안내</span><span data-lang="en">Install guide</span>
+                </a>
             </div>
             <p class="meta">
                 <span>macOS 13+</span>
                 <span>Apple Silicon</span>
-                <span>무료</span>
+                <span><span data-lang="ko">무료</span><span data-lang="en">Free</span></span>
             </p>
         </div>
 
@@ -669,16 +715,23 @@ footer {
 
 <section id="features">
     <div class="wrap">
-        <span class="section-label">기능</span>
-        <h2>재생이 곧 몰입이 됩니다.</h2>
+        <span class="section-label"><span data-lang="ko">기능</span><span data-lang="en">Features</span></span>
+        <h2>
+            <span data-lang="ko">재생을 누르는 순간, 몰입이 시작됩니다.</span>
+            <span data-lang="en">Press play, and you're already there.</span>
+        </h2>
         <p class="section-lead">
-            재생이 시작되는 그 순간부터 가사는 이미 번역돼 있고, 배경은 라인 흐름에 맞춰 흐릅니다.
+            <span data-lang="ko">재생이 시작되는 순간 가사는 이미 번역돼 있고, 배경은 라인을 따라 흐릅니다.</span>
+            <span data-lang="en">The lyrics are translated before the first note plays, and the backdrop flows along with every line.</span>
         </p>
 
         <div class="features">
             <div class="feature">
-                <h3>3라인 포커스</h3>
-                <p>이전 · 현재 · 다음 한 줄씩. 현재 라인만 뚜렷하고 주변은 페이드되는 구조라 시선이 저절로 모입니다.</p>
+                <h3><span data-lang="ko">3라인 포커스</span><span data-lang="en">3-line focus</span></h3>
+                <p>
+                    <span data-lang="ko">이전 · 현재 · 다음, 딱 세 줄. 주변 라인은 은은하게 페이드되고 현재 라인만 또렷이 남아 시선이 저절로 모입니다.</span>
+                    <span data-lang="en">Previous, current, next — just three lines. The surrounding lines fade out, so the current line holds your attention naturally.</span>
+                </p>
                 <div class="focus-demo">
                     <div class="l dim">The night is still young,</div>
                     <div class="l active">and we're chasing the stars</div>
@@ -687,8 +740,11 @@ footer {
             </div>
 
             <div class="feature">
-                <h3>선번역</h3>
-                <p>곡 로드 직후 전체 가사를 백그라운드 병렬 번역합니다. 라인이 넘어가는 순간 "번역 중…" 플래시 없음.</p>
+                <h3><span data-lang="ko">선번역</span><span data-lang="en">Pre-translation</span></h3>
+                <p>
+                    <span data-lang="ko">곡을 불러오는 순간, 전체 가사를 백그라운드에서 병렬 번역해둡니다. 라인이 바뀌어도 "번역 중…" 같은 지연이 없습니다.</span>
+                    <span data-lang="en">The moment a track loads, every line is translated in parallel in the background. No "Translating…" flash when the next line comes in.</span>
+                </p>
                 <div class="focus-demo">
                     <div class="l active">and we're chasing the stars</div>
                     <div class="l" style="opacity: 0.75; font-size: 13px;">그리고 우린 별을 좇고 있어</div>
@@ -696,8 +752,11 @@ footer {
             </div>
 
             <div class="feature">
-                <h3>9개 언어</h3>
-                <p>한 번의 클릭으로 대상 언어를 바꿉니다. 설정은 영속되며, 번역 캐시는 언어별로 분리돼 토글이 즉각적입니다.</p>
+                <h3><span data-lang="ko">9개 언어</span><span data-lang="en">9 languages</span></h3>
+                <p>
+                    <span data-lang="ko">대상 언어는 한 번의 클릭으로 바뀝니다. 선택은 다음 실행에도 유지되고, 언어별로 캐시가 분리돼 전환이 즉시 이뤄집니다.</span>
+                    <span data-lang="en">Switch target languages in a single click. Your choice persists across launches, and each language has its own cache — toggling is instant.</span>
+                </p>
                 <div class="lang-grid">
                     <div class="cell ko">한국어</div>
                     <div class="cell">English</div>
@@ -712,17 +771,29 @@ footer {
             </div>
 
             <div class="feature wide">
-                <h3>Ambient 배경</h3>
-                <p>6종 그라디언트 팔레트가 라인이 넘어갈 때마다 부드럽게 전환됩니다. 60fps 로 끊김 없이 흐르는 블롭이 메뉴바 창 안에서 살아 숨쉽니다.</p>
+                <h3><span data-lang="ko">Ambient 배경</span><span data-lang="en">Ambient backdrop</span></h3>
+                <p>
+                    <span data-lang="ko">라인이 바뀔 때마다 6종 팔레트가 부드럽게 전환됩니다. 60fps 로 흐르는 그라디언트 블롭이 메뉴바 창 안을 은은하게 채웁니다.</span>
+                    <span data-lang="en">Six gradient palettes glide into each other as the lines pass by. Gradient blobs flow at 60fps, giving the little window a quiet warmth.</span>
+                </p>
                 <div class="palette-demo"></div>
             </div>
 
             <div class="feature">
-                <h3>즉시 토글 · 재생 컨트롤</h3>
-                <p>eye 아이콘으로 번역 ↔ 원문 즉시 전환. 재생/정지 · 이전/다음 트랙도 메뉴바 창 안에서.</p>
+                <h3>
+                    <span data-lang="ko">즉시 토글 · 재생 컨트롤</span>
+                    <span data-lang="en">Instant toggle · playback</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">눈 아이콘 하나로 번역 ↔ 원문을 즉시 전환하고, 재생 · 정지 · 이전 · 다음 곡까지 메뉴바 창 안에서 조작합니다.</span>
+                    <span data-lang="en">One tap on the eye icon flips between translation and original. Play, pause, previous, next — all from inside the menu bar window.</span>
+                </p>
                 <div class="focus-demo">
                     <div class="l" style="display:flex; justify-content: space-between; align-items: center;">
-                        <span>👁 번역 켜짐</span>
+                        <span>
+                            <span data-lang="ko">👁 번역 켜짐</span>
+                            <span data-lang="en">👁 Translation on</span>
+                        </span>
                         <span style="opacity: 0.5;">◀ ▶ ▶</span>
                     </div>
                 </div>
@@ -734,21 +805,58 @@ footer {
 <section id="install">
     <div class="wrap">
         <div class="install">
-            <span class="section-label" style="text-align:left; display:block;">설치</span>
-            <h2>1분 설치</h2>
+            <span class="section-label" style="text-align:left; display:block;">
+                <span data-lang="ko">설치</span><span data-lang="en">Install</span>
+            </span>
+            <h2>
+                <span data-lang="ko">1분 설치</span>
+                <span data-lang="en">Install in a minute</span>
+            </h2>
             <p class="section-lead">
-                Versa 는 아직 Apple 공증을 받지 않았으므로, 첫 실행 시 한 번만 우클릭 → 열기가 필요합니다.
+                <span data-lang="ko">Versa 는 아직 Apple 공증 전이라 첫 실행 때 한 번만 우클릭 → 열기가 필요합니다.</span>
+                <span data-lang="en">Versa isn't Apple-notarized yet, so the first launch needs a one-time right-click → Open.</span>
             </p>
             <ol class="steps">
-                <li>위 <strong>Mac 에서 다운로드</strong> 버튼으로 <code>.dmg</code> 를 받습니다.</li>
-                <li>dmg 를 열고 <strong>Versa.app</strong> 을 <strong>Applications</strong> 폴더로 드래그.</li>
-                <li>Applications 에서 <strong>Versa 아이콘을 우클릭 → 열기</strong>. "개발자를 확인할 수 없습니다" 경고가 뜨면 <strong>열기</strong> 를 다시 클릭.</li>
-                <li>macOS 가 <strong>Spotify / Music 제어 권한</strong>을 묻습니다 → <strong>허용</strong>.</li>
-                <li>메뉴바 우측의 <strong>리본 아이콘</strong>을 클릭하면 창이 열립니다.</li>
+                <li>
+                    <span>
+                        <span data-lang="ko">위의 <strong>Mac 용 다운로드</strong> 버튼으로 <code>.dmg</code> 파일을 받습니다.</span>
+                        <span data-lang="en">Click <strong>Download for Mac</strong> above to grab the <code>.dmg</code> file.</span>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <span data-lang="ko">dmg 를 열고 <strong>Versa.app</strong> 을 <strong>Applications</strong> 폴더로 드래그합니다.</span>
+                        <span data-lang="en">Open the dmg and drag <strong>Versa.app</strong> into your <strong>Applications</strong> folder.</span>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <span data-lang="ko">Applications 에서 <strong>Versa 를 우클릭 → 열기</strong>. "개발자를 확인할 수 없습니다" 경고가 뜨면 <strong>열기</strong> 를 한 번 더 누릅니다.</span>
+                        <span data-lang="en">In Applications, <strong>right-click Versa → Open</strong>. If macOS warns "cannot verify developer," click <strong>Open</strong> one more time.</span>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <span data-lang="ko">macOS 가 <strong>Spotify · Music 제어 권한</strong>을 물으면 <strong>허용</strong>합니다.</span>
+                        <span data-lang="en">macOS will ask for <strong>Spotify / Music automation permission</strong> — <strong>allow</strong> it.</span>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <span data-lang="ko">메뉴바 우측의 <strong>리본 아이콘</strong>을 클릭하면 Versa 창이 열립니다.</span>
+                        <span data-lang="en">Click the <strong>ribbon icon</strong> on the right of the menu bar to open Versa.</span>
+                    </span>
+                </li>
             </ol>
             <p class="note">
-                <strong>왜 우클릭 열기인가요?</strong>
-                아직 Apple Developer Program 에 가입하지 않아 앱이 공증되지 않았습니다. 최초 한 번만 우클릭으로 허용하면, 이후부터는 일반 앱처럼 Launchpad · Spotlight 에서 바로 열 수 있습니다.
+                <span data-lang="ko">
+                    <strong>왜 우클릭으로 열어야 하나요?</strong>
+                    Versa 는 아직 Apple Developer Program 공증을 받지 않은 상태입니다. 최초 한 번만 우클릭으로 허용하면, 이후부터는 Launchpad 나 Spotlight 에서 일반 앱처럼 바로 열 수 있습니다.
+                </span>
+                <span data-lang="en">
+                    <strong>Why right-click to open?</strong>
+                    Versa isn't enrolled in the Apple Developer Program yet, so it isn't notarized. After you approve it once, it opens like any other app from Launchpad or Spotlight.
+                </span>
             </p>
         </div>
     </div>
@@ -757,32 +865,74 @@ footer {
 <section id="faq">
     <div class="wrap">
         <span class="section-label">FAQ</span>
-        <h2>자주 묻는 질문</h2>
-        <p class="section-lead">더 궁금한 점은 GitHub 이슈로 남겨주세요.</p>
+        <h2>
+            <span data-lang="ko">자주 묻는 질문</span>
+            <span data-lang="en">Frequently asked</span>
+        </h2>
+        <p class="section-lead">
+            <span data-lang="ko">더 궁금한 점은 GitHub 이슈로 남겨주세요.</span>
+            <span data-lang="en">Have something else to ask? Open an issue on GitHub.</span>
+        </p>
         <div class="faq">
             <div class="faq-item">
-                <h3>어떤 음악 앱을 지원하나요?</h3>
-                <p>Spotify · Apple Music (Music.app). 두 앱 중 재생 중인 쪽을 자동으로 감지합니다. YouTube · 브라우저 재생 지원은 로드맵에 포함돼 있습니다.</p>
+                <h3>
+                    <span data-lang="ko">어떤 음악 앱을 지원하나요?</span>
+                    <span data-lang="en">Which music apps are supported?</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">Spotify 와 Apple Music (Music.app) 입니다. 두 앱 중 재생 중인 쪽을 자동으로 감지합니다. YouTube 와 브라우저 재생 지원은 로드맵에 있습니다.</span>
+                    <span data-lang="en">Spotify and Apple Music (Music.app). Versa auto-detects whichever one is currently playing. Support for YouTube and browser playback is on the roadmap.</span>
+                </p>
             </div>
             <div class="faq-item">
-                <h3>인터넷 없이도 동작하나요?</h3>
-                <p>가사 조회와 번역 모두 외부 API (LRCLIB · Google 번역) 를 사용하므로 네트워크가 필요합니다. 오프라인 캐시는 곡 단위로 유지됩니다.</p>
+                <h3>
+                    <span data-lang="ko">인터넷 없이도 동작하나요?</span>
+                    <span data-lang="en">Does it work offline?</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">가사 조회와 번역 모두 외부 API (LRCLIB, Google 번역) 를 사용하므로 네트워크가 필요합니다. 한 번 불러온 곡의 가사와 번역은 세션 동안 메모리에 캐시됩니다.</span>
+                    <span data-lang="en">Lyrics lookup and translation both rely on external APIs (LRCLIB and Google Translate), so network is required. Once a track is loaded, its lyrics and translations stay in memory for the session.</span>
+                </p>
             </div>
             <div class="faq-item">
-                <h3>가사가 표시되지 않는 곡이 있어요.</h3>
-                <p>LRCLIB 에 싱크된 가사가 등록돼 있어야 표시됩니다. 사용자 업로드 기반이라 최신 · 마이너 곡은 등록돼 있지 않을 수 있습니다.</p>
+                <h3>
+                    <span data-lang="ko">가사가 표시되지 않는 곡이 있어요.</span>
+                    <span data-lang="en">Some songs don't show lyrics.</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">LRCLIB 에 싱크 가사가 등록된 곡만 표시됩니다. LRCLIB 는 사용자 업로드 기반이라 최신 곡이나 덜 알려진 곡은 아직 등록돼 있지 않을 수 있습니다.</span>
+                    <span data-lang="en">Only tracks with synced lyrics on LRCLIB show up. LRCLIB is community-contributed, so brand-new or lesser-known tracks may not be there yet.</span>
+                </p>
             </div>
             <div class="faq-item">
-                <h3>개인정보를 수집하나요?</h3>
-                <p>아니요. Versa 는 재생곡의 제목 · 아티스트만 가사 API 에, 가사 텍스트만 번역 API 에 전송합니다. 사용자 식별 정보 · 트래킹 · 분석 SDK · 로그 서버는 전혀 없습니다.</p>
+                <h3>
+                    <span data-lang="ko">개인정보를 수집하나요?</span>
+                    <span data-lang="en">Does Versa collect any data?</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">아니요. Versa 는 가사 API 에는 곡 제목과 아티스트명만, 번역 API 에는 가사 텍스트만 전송합니다. 사용자 식별 정보, 트래킹, 분석 SDK, 로그 서버는 전혀 없습니다.</span>
+                    <span data-lang="en">No. Versa sends only the song title and artist to the lyrics API, and only the lyric text to the translation API. There are no user identifiers, trackers, analytics SDKs, or log servers.</span>
+                </p>
             </div>
             <div class="faq-item">
-                <h3>무료인가요? 광고는요?</h3>
-                <p>현재 완전 무료이며 광고는 없습니다. 장기적으로는 무료 (광고 포함) / Pro (광고 제거 + 고급 기능) 모델을 검토 중이며, 전환은 최소 v1.0 이후입니다.</p>
+                <h3>
+                    <span data-lang="ko">무료인가요? 광고는요?</span>
+                    <span data-lang="en">Is it free? What about ads?</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">현재는 완전히 무료이며 광고도 없습니다. 장기적으로 무료 (광고 포함) 와 Pro (광고 제거 + 고급 기능) 로 나누는 모델을 검토 중이지만, 전환은 빨라야 v1.0 이후입니다.</span>
+                    <span data-lang="en">Completely free with no ads for now. Long-term, a Free (with ads) / Pro (ad-free + extras) split is being considered, but not before v1.0.</span>
+                </p>
             </div>
             <div class="faq-item">
-                <h3>Intel Mac 에서도 되나요?</h3>
-                <p>현재 빌드는 Apple Silicon (M1 이상) 전용입니다. Intel 지원 유니버설 바이너리는 수요에 따라 검토합니다.</p>
+                <h3>
+                    <span data-lang="ko">Intel Mac 에서도 되나요?</span>
+                    <span data-lang="en">Does it run on Intel Macs?</span>
+                </h3>
+                <p>
+                    <span data-lang="ko">현재 빌드는 Apple Silicon (M1 이상) 전용입니다. Intel Mac 지원은 수요에 따라 이후 유니버설 바이너리로 검토할 예정입니다.</span>
+                    <span data-lang="en">The current build is Apple Silicon only (M1 or later). A universal binary for Intel is under consideration depending on demand.</span>
+                </p>
             </div>
         </div>
     </div>
@@ -792,11 +942,74 @@ footer {
     <div class="wrap footer-inner">
         <div>Copyright © 2026 정현진 (currenjin). All rights reserved.</div>
         <div class="footer-links">
-            <a href="https://github.com/currenjin/versa/releases">릴리스</a>
-            <a href="https://github.com/currenjin/versa/issues">이슈</a>
+            <a href="https://github.com/currenjin/versa/releases">
+                <span data-lang="ko">릴리스</span><span data-lang="en">Releases</span>
+            </a>
+            <a href="https://github.com/currenjin/versa/issues">
+                <span data-lang="ko">이슈</span><span data-lang="en">Issues</span>
+            </a>
         </div>
     </div>
 </footer>
+
+<script>
+(function () {
+    const META = {
+        ko: {
+            title: 'Versa — 지금 이 곡의 가사를, 당신의 언어로',
+            desc: 'Mac 메뉴바에서 Spotify · Apple Music 재생곡의 가사를 실시간 싱크로 띄우고 9개 언어로 번역하는 앱.',
+            ogTitle: 'Versa — 메뉴바에서 펼쳐지는 실시간 가사 · 번역',
+            ogDesc: 'Spotify · Apple Music 재생곡을 싱크 가사로 띄우고, 곡이 시작되기도 전에 번역을 준비합니다.'
+        },
+        en: {
+            title: 'Versa — Live lyrics and translation, right in your menu bar',
+            desc: 'A Mac menu bar app that shows synced lyrics for Spotify and Apple Music, with live translation into 9 languages.',
+            ogTitle: 'Versa — Live lyrics · translation, in your menu bar',
+            ogDesc: "Synced lyrics for whatever's playing on Spotify or Apple Music, pre-translated before the song starts."
+        }
+    };
+
+    function detectLang() {
+        const params = new URLSearchParams(location.search);
+        const urlLang = params.get('lang');
+        if (urlLang === 'ko' || urlLang === 'en') return urlLang;
+        const saved = localStorage.getItem('versa-lang');
+        if (saved === 'ko' || saved === 'en') return saved;
+        const nav = (navigator.language || 'en').toLowerCase();
+        return nav.startsWith('ko') ? 'ko' : 'en';
+    }
+
+    function setMeta(name, value, attr) {
+        const selector = attr === 'property' ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute('content', value);
+    }
+
+    function setLang(lang) {
+        document.documentElement.lang = lang;
+        try { localStorage.setItem('versa-lang', lang); } catch (e) {}
+
+        document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+            b.classList.toggle('active', b.dataset.setLang === lang);
+            b.setAttribute('aria-pressed', b.dataset.setLang === lang ? 'true' : 'false');
+        });
+
+        const m = META[lang];
+        if (m) {
+            document.title = m.title;
+            setMeta('description', m.desc);
+            setMeta('og:title', m.ogTitle, 'property');
+            setMeta('og:description', m.ogDesc, 'property');
+        }
+    }
+
+    document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+        b.addEventListener('click', function () { setLang(b.dataset.setLang); });
+    });
+
+    setLang(detectLang());
+})();
+</script>
 
 </body>
 </html>

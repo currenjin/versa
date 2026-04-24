@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Versa — 지금 이 곡의 가사를, 당신의 언어로</title>
+<meta name="description" content="Mac 메뉴바에서 Spotify · Apple Music 재생곡을 실시간 싱크로 띄우고 9개 언어로 번역하는 앱.">
+
+<meta property="og:title" content="Versa — 메뉴바에서 펼쳐지는 실시간 가사 · 번역">
+<meta property="og:description" content="Spotify · Apple Music 재생곡을 싱크로 띄우고, 곡이 시작되기 전에 번역까지 끝나 있습니다.">
+<meta property="og:image" content="https://currenjin.github.io/versa-page/assets/icon.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" type="image/png" href="assets/icon.png">
+
+<style>
+:root {
+    --bg: #08060f;
+    --fg: rgba(255, 255, 255, 0.92);
+    --fg-muted: rgba(255, 255, 255, 0.58);
+    --fg-dim: rgba(255, 255, 255, 0.38);
+    --line: rgba(255, 255, 255, 0.08);
+    --card: rgba(255, 255, 255, 0.04);
+    --accent-a: #ff7a4e;
+    --accent-b: #ff3f8a;
+    --accent-c: #8c47ff;
+
+    --palette-1: #142147;
+    --palette-2: #3d156b;
+    --palette-3: #8c38bf;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Inter", "Segoe UI", Roboto, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+a { color: inherit; }
+
+/* ---------------- nav ---------------- */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    background: rgba(8, 6, 15, 0.72);
+    border-bottom: 1px solid var(--line);
+}
+.nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--fg);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+}
+.brand img { width: 26px; height: 26px; border-radius: 6px; display: block; }
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+.nav-links a {
+    color: var(--fg-muted);
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-cta {
+    padding: 8px 16px;
+    background: var(--fg);
+    color: var(--bg) !important;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px !important;
+}
+.nav-cta:hover { background: #fff !important; color: var(--bg) !important; }
+@media (max-width: 640px) {
+    .nav-links a:not(.nav-cta) { display: none; }
+}
+
+/* ---------------- layout ---------------- */
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: 120px 0; }
+@media (max-width: 768px) { section { padding: 80px 0; } }
+
+h1, h2, h3 { letter-spacing: -0.02em; }
+
+/* ---------------- hero ---------------- */
+.hero {
+    position: relative;
+    padding: 72px 0 100px;
+    overflow: hidden;
+}
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+    will-change: transform;
+}
+.blob-1 {
+    width: 640px; height: 640px;
+    background: radial-gradient(circle, var(--palette-3) 0%, transparent 65%);
+    top: -180px; left: -180px;
+    animation: float-a 22s ease-in-out infinite;
+}
+.blob-2 {
+    width: 540px; height: 540px;
+    background: radial-gradient(circle, var(--palette-2) 0%, transparent 65%);
+    top: 120px; right: -140px;
+    animation: float-b 26s ease-in-out infinite;
+}
+.blob-3 {
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, var(--palette-1) 0%, transparent 65%);
+    bottom: -180px; left: 30%;
+    animation: float-c 30s ease-in-out infinite;
+}
+@keyframes float-a {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(80px, 60px); }
+}
+@keyframes float-b {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-60px, 80px); }
+}
+@keyframes float-c {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(50px, -60px); }
+}
+
+.hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+@media (max-width: 960px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 56px; }
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+.badge .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+    box-shadow: 0 0 8px var(--accent-b);
+}
+
+h1 {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.05;
+    margin: 0 0 24px;
+    letter-spacing: -0.03em;
+}
+.hero-lead {
+    font-size: 19px;
+    color: var(--fg-muted);
+    margin: 0 0 36px;
+    line-height: 1.6;
+    max-width: 500px;
+}
+@media (max-width: 768px) {
+    h1 { font-size: 44px; }
+    .hero-lead { font-size: 16px; }
+}
+
+.cta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.12s, box-shadow 0.15s, background 0.15s;
+    line-height: 1;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary {
+    background: #fff;
+    color: #0c0820;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 12px 32px rgba(255, 255, 255, 0.12);
+}
+.btn-primary:hover { box-shadow: 0 2px 0 rgba(0,0,0,0.15), 0 16px 40px rgba(255, 255, 255, 0.2); }
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--fg);
+    border: 1px solid var(--line);
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
+
+.meta {
+    font-size: 13px;
+    color: var(--fg-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.meta span:not(:last-child)::after {
+    content: "·";
+    margin-left: 10px;
+    color: var(--fg-dim);
+}
+
+/* ---------------- hero mockup ---------------- */
+.mockup {
+    position: relative;
+    justify-self: center;
+    width: 100%;
+    max-width: 460px;
+    aspect-ratio: 11 / 8;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow:
+        0 40px 80px -20px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 60px rgba(140, 71, 255, 0.15);
+}
+.mockup-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--palette-1) 0%, var(--palette-2) 100%);
+}
+.mockup-bg::before, .mockup-bg::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+}
+.mockup-bg::before {
+    width: 240px; height: 240px;
+    background: var(--palette-3);
+    opacity: 0.65;
+    top: 20%; right: -20%;
+    animation: mockup-float-1 12s ease-in-out infinite;
+}
+.mockup-bg::after {
+    width: 200px; height: 200px;
+    background: var(--palette-2);
+    opacity: 0.55;
+    bottom: -10%; left: -10%;
+    animation: mockup-float-2 15s ease-in-out infinite;
+}
+@keyframes mockup-float-1 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-30px, 30px); }
+}
+@keyframes mockup-float-2 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(40px, -20px); }
+}
+
+.mockup-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+    font-size: 13px;
+}
+.mockup-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 12px;
+}
+.mockup-header .note { opacity: 0.5; }
+.mockup-header .title { font-weight: 600; opacity: 0.9; }
+.mockup-header .artist { opacity: 0.55; }
+.mockup-header .dots {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    opacity: 0.55;
+    font-size: 11px;
+}
+.mockup-body {
+    flex: 1;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+.lyric {
+    font-weight: 400;
+    line-height: 1.45;
+}
+.lyric.prev { font-size: 13px; opacity: 0.5; }
+.lyric.next { font-size: 13px; opacity: 0.5; }
+.lyric.current {
+    font-size: 17px;
+    font-weight: 600;
+    opacity: 1;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.lyric-translation {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-top: 3px;
+    font-weight: 400;
+}
+.mockup-controls {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    padding: 12px 0 16px;
+    opacity: 0.85;
+}
+.mockup-controls span {
+    font-size: 14px;
+    opacity: 0.8;
+}
+.mockup-controls .play { font-size: 17px; opacity: 1; }
+
+/* ---------------- section shared ---------------- */
+.section-label {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-b);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+}
+h2 {
+    font-size: 44px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 20px;
+    line-height: 1.1;
+}
+.section-lead {
+    text-align: center;
+    font-size: 17px;
+    color: var(--fg-muted);
+    margin: 0 auto 64px;
+    max-width: 620px;
+}
+@media (max-width: 768px) {
+    h2 { font-size: 32px; }
+    .section-lead { font-size: 15px; margin-bottom: 48px; }
+}
+
+/* ---------------- features ---------------- */
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+@media (max-width: 900px) {
+    .features { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+    .features { grid-template-columns: 1fr; }
+}
+.feature {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+}
+.feature:hover {
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-2px);
+}
+.feature.wide { grid-column: span 2; }
+@media (max-width: 900px) { .feature.wide { grid-column: span 1; } }
+.feature h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+.feature p {
+    font-size: 14.5px;
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.65;
+}
+
+/* feature visual — 3-line focus */
+.focus-demo {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    font-size: 13px;
+}
+.focus-demo .l { padding: 3px 0; }
+.focus-demo .dim { opacity: 0.3; }
+.focus-demo .active { opacity: 1; font-weight: 600; font-size: 15px; color: var(--accent-b); }
+
+/* feature visual — language grid */
+.lang-grid {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    font-size: 12px;
+}
+.lang-grid .cell {
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    text-align: center;
+    color: var(--fg-muted);
+}
+.lang-grid .cell.ko { background: linear-gradient(135deg, rgba(255, 122, 78, 0.2), rgba(140, 71, 255, 0.2)); color: #fff; font-weight: 600; }
+
+/* feature visual — palette demo */
+.palette-demo {
+    margin-top: auto;
+    height: 64px;
+    border-radius: 10px;
+    background:
+        radial-gradient(circle at 20% 30%, var(--palette-3) 0%, transparent 55%),
+        radial-gradient(circle at 80% 70%, var(--palette-2) 0%, transparent 55%),
+        var(--palette-1);
+    animation: palette-shift 8s ease-in-out infinite;
+}
+@keyframes palette-shift {
+    0%, 100% { filter: hue-rotate(0deg); }
+    50% { filter: hue-rotate(40deg); }
+}
+
+/* ---------------- install ---------------- */
+.install {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 44px 44px 40px;
+}
+@media (max-width: 560px) { .install { padding: 32px 24px; } }
+.install h2 { text-align: left; font-size: 30px; margin-bottom: 12px; }
+.install .section-lead { text-align: left; margin: 0 0 28px; font-size: 15px; }
+.steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 14px;
+    font-size: 15px;
+    color: var(--fg);
+}
+.steps li::before {
+    content: counter(step);
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-a), var(--accent-b) 60%, var(--accent-c));
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    margin-top: 1px;
+}
+.steps code {
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+.install .note {
+    margin-top: 28px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    border-left: 3px solid var(--accent-b);
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    line-height: 1.65;
+}
+
+/* ---------------- faq ---------------- */
+.faq {
+    max-width: 720px;
+    margin: 0 auto;
+}
+.faq-item {
+    border-top: 1px solid var(--line);
+    padding: 22px 0;
+}
+.faq-item:last-child { border-bottom: 1px solid var(--line); }
+.faq-item h3 {
+    font-size: 16.5px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+.faq-item p {
+    font-size: 14.5px;
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.7;
+}
+
+/* ---------------- footer ---------------- */
+footer {
+    border-top: 1px solid var(--line);
+    padding: 40px 0 60px;
+    margin-top: 40px;
+}
+.footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    font-size: 13px;
+    color: var(--fg-dim);
+}
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { color: var(--fg-muted); text-decoration: none; }
+.footer-links a:hover { color: var(--fg); }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a class="brand" href="#">
+            <img src="assets/icon.png" alt="">
+            <span>Versa</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features">특징</a>
+            <a href="#install">설치</a>
+            <a href="#faq">FAQ</a>
+            <a class="nav-cta" href="https://github.com/currenjin/versa-page/releases/latest">다운로드</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="wrap hero-inner">
+        <div class="hero-copy">
+            <div class="badge">
+                <span class="dot"></span>
+                Pre-release · v0.1.1
+            </div>
+            <h1>메뉴바에서 펼쳐지는<br>실시간 가사 · 번역.</h1>
+            <p class="hero-lead">
+                Spotify · Apple Music 재생곡의 가사를 싱크로 띄우고, 곡이 시작되기 전에 9개 언어 번역까지 끝나 있습니다.
+            </p>
+            <div class="cta">
+                <a class="btn btn-primary" href="https://github.com/currenjin/versa-page/releases/latest">
+                    <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1v9.3l3.1-3.1 1.1 1.1L8 12.5 3.8 8.3l1.1-1.1L8 10.3V1h0zM2 13h12v2H2z"/></svg>
+                    Mac 에서 다운로드
+                </a>
+                <a class="btn btn-ghost" href="#install">설치 안내</a>
+            </div>
+            <p class="meta">
+                <span>macOS 13+</span>
+                <span>Apple Silicon</span>
+                <span>무료</span>
+            </p>
+        </div>
+
+        <div class="mockup" aria-hidden="true">
+            <div class="mockup-bg"></div>
+            <div class="mockup-content">
+                <div class="mockup-header">
+                    <span class="note">♪</span>
+                    <span class="title">Sample Track</span>
+                    <span class="artist">· Demo Artist</span>
+                    <span class="dots">
+                        <span>👁</span>
+                        <span>🌐</span>
+                        <span>✕</span>
+                    </span>
+                </div>
+                <div class="mockup-body">
+                    <div class="lyric prev">The night is still young,</div>
+                    <div class="lyric current">
+                        and we're chasing the stars
+                        <div class="lyric-translation">그리고 우린 별을 좇고 있어</div>
+                    </div>
+                    <div class="lyric next">far beyond the horizon</div>
+                </div>
+                <div class="mockup-controls">
+                    <span>◀</span>
+                    <span class="play">▶</span>
+                    <span>▶</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="features">
+    <div class="wrap">
+        <span class="section-label">기능</span>
+        <h2>재생이 곧 몰입이 됩니다.</h2>
+        <p class="section-lead">
+            재생이 시작되는 그 순간부터 가사는 이미 번역돼 있고, 배경은 라인 흐름에 맞춰 흐릅니다.
+        </p>
+
+        <div class="features">
+            <div class="feature">
+                <h3>3라인 포커스</h3>
+                <p>이전 · 현재 · 다음 한 줄씩. 현재 라인만 뚜렷하고 주변은 페이드되는 구조라 시선이 저절로 모입니다.</p>
+                <div class="focus-demo">
+                    <div class="l dim">The night is still young,</div>
+                    <div class="l active">and we're chasing the stars</div>
+                    <div class="l dim">far beyond the horizon</div>
+                </div>
+            </div>
+
+            <div class="feature">
+                <h3>선번역</h3>
+                <p>곡 로드 직후 전체 가사를 백그라운드 병렬 번역합니다. 라인이 넘어가는 순간 "번역 중…" 플래시 없음.</p>
+                <div class="focus-demo">
+                    <div class="l active">and we're chasing the stars</div>
+                    <div class="l" style="opacity: 0.75; font-size: 13px;">그리고 우린 별을 좇고 있어</div>
+                </div>
+            </div>
+
+            <div class="feature">
+                <h3>9개 언어</h3>
+                <p>한 번의 클릭으로 대상 언어를 바꿉니다. 설정은 영속되며, 번역 캐시는 언어별로 분리돼 토글이 즉각적입니다.</p>
+                <div class="lang-grid">
+                    <div class="cell ko">한국어</div>
+                    <div class="cell">English</div>
+                    <div class="cell">日本語</div>
+                    <div class="cell">简体中文</div>
+                    <div class="cell">繁體中文</div>
+                    <div class="cell">Español</div>
+                    <div class="cell">Français</div>
+                    <div class="cell">Deutsch</div>
+                    <div class="cell">Tiếng Việt</div>
+                </div>
+            </div>
+
+            <div class="feature wide">
+                <h3>Ambient 배경</h3>
+                <p>6종 그라디언트 팔레트가 라인이 넘어갈 때마다 부드럽게 전환됩니다. 60fps 로 끊김 없이 흐르는 블롭이 메뉴바 창 안에서 살아 숨쉽니다.</p>
+                <div class="palette-demo"></div>
+            </div>
+
+            <div class="feature">
+                <h3>즉시 토글 · 재생 컨트롤</h3>
+                <p>eye 아이콘으로 번역 ↔ 원문 즉시 전환. 재생/정지 · 이전/다음 트랙도 메뉴바 창 안에서.</p>
+                <div class="focus-demo">
+                    <div class="l" style="display:flex; justify-content: space-between; align-items: center;">
+                        <span>👁 번역 켜짐</span>
+                        <span style="opacity: 0.5;">◀ ▶ ▶</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="install">
+    <div class="wrap">
+        <div class="install">
+            <span class="section-label" style="text-align:left; display:block;">설치</span>
+            <h2>1분 설치</h2>
+            <p class="section-lead">
+                Versa 는 아직 Apple 공증을 받지 않았으므로, 첫 실행 시 한 번만 우클릭 → 열기가 필요합니다.
+            </p>
+            <ol class="steps">
+                <li>위 <strong>Mac 에서 다운로드</strong> 버튼으로 <code>.dmg</code> 를 받습니다.</li>
+                <li>dmg 를 열고 <strong>Versa.app</strong> 을 <strong>Applications</strong> 폴더로 드래그.</li>
+                <li>Applications 에서 <strong>Versa 아이콘을 우클릭 → 열기</strong>. "개발자를 확인할 수 없습니다" 경고가 뜨면 <strong>열기</strong> 를 다시 클릭.</li>
+                <li>macOS 가 <strong>Spotify / Music 제어 권한</strong>을 묻습니다 → <strong>허용</strong>.</li>
+                <li>메뉴바 우측의 <strong>리본 아이콘</strong>을 클릭하면 창이 열립니다.</li>
+            </ol>
+            <p class="note">
+                <strong>왜 우클릭 열기인가요?</strong>
+                아직 Apple Developer Program 에 가입하지 않아 앱이 공증되지 않았습니다. 최초 한 번만 우클릭으로 허용하면, 이후부터는 일반 앱처럼 Launchpad · Spotlight 에서 바로 열 수 있습니다.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="faq">
+    <div class="wrap">
+        <span class="section-label">FAQ</span>
+        <h2>자주 묻는 질문</h2>
+        <p class="section-lead">더 궁금한 점은 GitHub 이슈로 남겨주세요.</p>
+        <div class="faq">
+            <div class="faq-item">
+                <h3>어떤 음악 앱을 지원하나요?</h3>
+                <p>Spotify · Apple Music (Music.app). 두 앱 중 재생 중인 쪽을 자동으로 감지합니다. YouTube · 브라우저 재생 지원은 로드맵에 포함돼 있습니다.</p>
+            </div>
+            <div class="faq-item">
+                <h3>인터넷 없이도 동작하나요?</h3>
+                <p>가사 조회와 번역 모두 외부 API (LRCLIB · Google 번역) 를 사용하므로 네트워크가 필요합니다. 오프라인 캐시는 곡 단위로 유지됩니다.</p>
+            </div>
+            <div class="faq-item">
+                <h3>가사가 표시되지 않는 곡이 있어요.</h3>
+                <p>LRCLIB 에 싱크된 가사가 등록돼 있어야 표시됩니다. 사용자 업로드 기반이라 최신 · 마이너 곡은 등록돼 있지 않을 수 있습니다.</p>
+            </div>
+            <div class="faq-item">
+                <h3>개인정보를 수집하나요?</h3>
+                <p>아니요. Versa 는 재생곡의 제목 · 아티스트만 가사 API 에, 가사 텍스트만 번역 API 에 전송합니다. 사용자 식별 정보 · 트래킹 · 분석 SDK · 로그 서버는 전혀 없습니다.</p>
+            </div>
+            <div class="faq-item">
+                <h3>무료인가요? 광고는요?</h3>
+                <p>현재 완전 무료이며 광고는 없습니다. 장기적으로는 무료 (광고 포함) / Pro (광고 제거 + 고급 기능) 모델을 검토 중이며, 전환은 최소 v1.0 이후입니다.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Intel Mac 에서도 되나요?</h3>
+                <p>현재 빌드는 Apple Silicon (M1 이상) 전용입니다. Intel 지원 유니버설 바이너리는 수요에 따라 검토합니다.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="wrap footer-inner">
+        <div>Copyright © 2026 정현진 (currenjin). All rights reserved.</div>
+        <div class="footer-links">
+            <a href="https://github.com/currenjin/versa-page/releases">릴리스</a>
+            <a href="https://github.com/currenjin/versa-page/issues">이슈</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

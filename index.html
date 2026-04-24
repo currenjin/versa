@@ -386,6 +386,10 @@ h1 {
     margin-top: 3px;
     font-weight: 400;
 }
+.lyric.prev .lyric-translation, .lyric.next .lyric-translation {
+    font-size: 11px;
+    margin-top: 1px;
+}
 .mockup-controls {
     display: flex;
     justify-content: center;
@@ -696,20 +700,32 @@ footer {
                     </span>
                 </div>
                 <div class="mockup-body" data-lang="ko">
-                    <div class="lyric prev">The night is still young,</div>
+                    <div class="lyric prev">
+                        The night is still young,
+                        <div class="lyric-translation">밤은 아직 길고,</div>
+                    </div>
                     <div class="lyric current">
                         and we're chasing the stars
                         <div class="lyric-translation">그리고 우린 별을 좇고 있어</div>
                     </div>
-                    <div class="lyric next">far beyond the horizon</div>
+                    <div class="lyric next">
+                        far beyond the horizon
+                        <div class="lyric-translation">저 지평선 너머로</div>
+                    </div>
                 </div>
                 <div class="mockup-body" data-lang="en">
-                    <div class="lyric prev">밤은 아직 길고,</div>
+                    <div class="lyric prev">
+                        밤은 아직 길고,
+                        <div class="lyric-translation">The night is still young,</div>
+                    </div>
                     <div class="lyric current">
                         우린 별을 좇고 있어
                         <div class="lyric-translation">and we're chasing the stars</div>
                     </div>
-                    <div class="lyric next">저 지평선 너머로</div>
+                    <div class="lyric next">
+                        저 지평선 너머로
+                        <div class="lyric-translation">far beyond the horizon</div>
+                    </div>
                 </div>
                 <div class="mockup-controls">
                     <span>◀</span>
@@ -759,12 +775,32 @@ footer {
                     <span data-lang="en">The moment a track loads, every line is translated in parallel in the background. No "Translating…" flash when the next line comes in.</span>
                 </p>
                 <div class="focus-demo" data-lang="ko">
-                    <div class="l active">and we're chasing the stars</div>
-                    <div class="l" style="opacity: 0.75; font-size: 13px;">그리고 우린 별을 좇고 있어</div>
+                    <div class="l" style="opacity: 0.55;">
+                        <div>The night is still young,</div>
+                        <div style="font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.55); margin-top: 1px;">밤은 아직 길고,</div>
+                    </div>
+                    <div class="l active">
+                        <div>and we're chasing the stars</div>
+                        <div style="font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.82); margin-top: 2px;">그리고 우린 별을 좇고 있어</div>
+                    </div>
+                    <div class="l" style="opacity: 0.55;">
+                        <div>far beyond the horizon</div>
+                        <div style="font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.55); margin-top: 1px;">저 지평선 너머로</div>
+                    </div>
                 </div>
                 <div class="focus-demo" data-lang="en">
-                    <div class="l active">우린 별을 좇고 있어</div>
-                    <div class="l" style="opacity: 0.75; font-size: 13px;">and we're chasing the stars</div>
+                    <div class="l" style="opacity: 0.55;">
+                        <div>밤은 아직 길고,</div>
+                        <div style="font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.55); margin-top: 1px;">The night is still young,</div>
+                    </div>
+                    <div class="l active">
+                        <div>우린 별을 좇고 있어</div>
+                        <div style="font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.82); margin-top: 2px;">and we're chasing the stars</div>
+                    </div>
+                    <div class="l" style="opacity: 0.55;">
+                        <div>저 지평선 너머로</div>
+                        <div style="font-size: 11px; font-weight: 400; color: rgba(255,255,255,0.55); margin-top: 1px;">far beyond the horizon</div>
+                    </div>
                 </div>
             </div>
 

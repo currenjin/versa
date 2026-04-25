@@ -285,13 +285,12 @@ h1 {
     color: var(--fg-dim);
 }
 
-/* ---------------- hero mockup ---------------- */
-.mockup {
+/* ---------------- hero screenshot ---------------- */
+.screenshot {
     position: relative;
     justify-self: center;
     width: 100%;
-    max-width: 460px;
-    aspect-ratio: 11 / 8;
+    max-width: 480px;
     border-radius: 18px;
     overflow: hidden;
     box-shadow:
@@ -299,109 +298,48 @@ h1 {
         0 0 0 1px rgba(255, 255, 255, 0.08),
         0 0 60px rgba(140, 71, 255, 0.15);
 }
-.mockup-bg {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, var(--palette-1) 0%, var(--palette-2) 100%);
-}
-.mockup-bg::before, .mockup-bg::after {
-    content: "";
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(40px);
-}
-.mockup-bg::before {
-    width: 240px; height: 240px;
-    background: var(--palette-3);
-    opacity: 0.65;
-    top: 20%; right: -20%;
-    animation: mockup-float-1 12s ease-in-out infinite;
-}
-.mockup-bg::after {
-    width: 200px; height: 200px;
-    background: var(--palette-2);
-    opacity: 0.55;
-    bottom: -10%; left: -10%;
-    animation: mockup-float-2 15s ease-in-out infinite;
-}
-@keyframes mockup-float-1 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(-30px, 30px); }
-}
-@keyframes mockup-float-2 {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(40px, -20px); }
+.screenshot img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
-.mockup-content {
+/* ---------------- gallery ---------------- */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-top: 24px;
+}
+@media (max-width: 720px) {
+    .gallery { grid-template-columns: 1fr; }
+}
+.gallery-item {
     position: relative;
-    z-index: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-    font-size: 13px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5);
+    background: var(--card);
 }
-.mockup-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    font-size: 12px;
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
-.mockup-header .note { opacity: 0.5; }
-.mockup-header .title { font-weight: 600; opacity: 0.9; }
-.mockup-header .artist { opacity: 0.55; }
-.mockup-header .dots {
-    margin-left: auto;
-    display: flex;
-    gap: 10px;
-    opacity: 0.55;
-    font-size: 11px;
+.gallery-caption {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(8, 6, 15, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 11.5px;
+    color: var(--fg-muted);
+    border: 1px solid var(--line);
 }
-.mockup-body {
-    flex: 1;
-    padding: 22px 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-}
-.lyric {
-    font-weight: 400;
-    line-height: 1.45;
-}
-.lyric.prev { font-size: 13px; opacity: 0.5; }
-.lyric.next { font-size: 13px; opacity: 0.5; }
-.lyric.current {
-    font-size: 17px;
-    font-weight: 600;
-    opacity: 1;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-.lyric-translation {
-    font-size: 13px;
-    opacity: 0.75;
-    margin-top: 3px;
-    font-weight: 400;
-}
-.lyric.prev .lyric-translation, .lyric.next .lyric-translation {
-    font-size: 11px;
-    margin-top: 1px;
-}
-.mockup-controls {
-    display: flex;
-    justify-content: center;
-    gap: 28px;
-    padding: 12px 0 16px;
-    opacity: 0.85;
-}
-.mockup-controls span {
-    font-size: 14px;
-    opacity: 0.8;
-}
-.mockup-controls .play { font-size: 17px; opacity: 1; }
 
 /* ---------------- section shared ---------------- */
 .section-label {
@@ -686,52 +624,32 @@ footer {
             </p>
         </div>
 
-        <div class="mockup" aria-hidden="true">
-            <div class="mockup-bg"></div>
-            <div class="mockup-content">
-                <div class="mockup-header">
-                    <span class="note">♪</span>
-                    <span class="title">Sample Track</span>
-                    <span class="artist">· Demo Artist</span>
-                    <span class="dots">
-                        <span>👁</span>
-                        <span>🌐</span>
-                        <span>✕</span>
-                    </span>
-                </div>
-                <div class="mockup-body" data-lang="ko">
-                    <div class="lyric prev">
-                        The night is still young,
-                        <div class="lyric-translation">밤은 아직 길고,</div>
-                    </div>
-                    <div class="lyric current">
-                        and we're chasing the stars
-                        <div class="lyric-translation">그리고 우린 별을 좇고 있어</div>
-                    </div>
-                    <div class="lyric next">
-                        far beyond the horizon
-                        <div class="lyric-translation">저 지평선 너머로</div>
-                    </div>
-                </div>
-                <div class="mockup-body" data-lang="en">
-                    <div class="lyric prev">
-                        밤은 아직 길고,
-                        <div class="lyric-translation">The night is still young,</div>
-                    </div>
-                    <div class="lyric current">
-                        우린 별을 좇고 있어
-                        <div class="lyric-translation">and we're chasing the stars</div>
-                    </div>
-                    <div class="lyric next">
-                        저 지평선 너머로
-                        <div class="lyric-translation">far beyond the horizon</div>
-                    </div>
-                </div>
-                <div class="mockup-controls">
-                    <span>◀</span>
-                    <span class="play">▶</span>
-                    <span>▶</span>
-                </div>
+        <div class="screenshot">
+            <img src="assets/screenshots/01-main-ko.png" data-lang="ko" alt="Versa 가 영어 곡을 한국어로 번역해 보여주는 화면">
+            <img src="assets/screenshots/02-main-en.png" data-lang="en" alt="Versa showing a Korean song with English translation">
+        </div>
+    </div>
+</section>
+
+<section id="screenshots" style="padding-top: 60px; padding-bottom: 60px;">
+    <div class="wrap">
+        <span class="section-label"><span data-lang="ko">갤러리</span><span data-lang="en">Gallery</span></span>
+        <h2 style="margin-bottom: 12px;">
+            <span data-lang="ko">상황마다 다른 분위기.</span>
+            <span data-lang="en">Different mood, every track.</span>
+        </h2>
+        <p class="section-lead" style="margin-bottom: 36px;">
+            <span data-lang="ko">곡이 바뀔 때마다 팔레트도 바뀝니다. 같은 화면이 한 번도 같지 않아요.</span>
+            <span data-lang="en">A new palette for every song. The same view, never twice the same.</span>
+        </p>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="assets/screenshots/03-palette-variety.png" alt="">
+                <span class="gallery-caption"><span data-lang="ko">곡마다 다른 팔레트</span><span data-lang="en">A new palette per song</span></span>
+            </div>
+            <div class="gallery-item">
+                <img src="assets/screenshots/04-translation-off.png" alt="">
+                <span class="gallery-caption"><span data-lang="ko">원문만 보기 (눈 아이콘 토글)</span><span data-lang="en">Original only (eye toggle)</span></span>
             </div>
         </div>
     </div>

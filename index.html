@@ -298,7 +298,8 @@ h1 {
         0 0 0 1px rgba(255, 255, 255, 0.08),
         0 0 60px rgba(140, 71, 255, 0.15);
 }
-.screenshot img {
+.screenshot img,
+.screenshot video {
     width: 100%;
     height: auto;
     display: block;
@@ -625,7 +626,13 @@ footer {
         </div>
 
         <div class="screenshot">
-            <img src="assets/demo-small.gif" alt="Versa cycling through different songs and palettes">
+            <video autoplay loop muted playsinline preload="auto"
+                   poster="assets/screenshots/01-main-ko.png"
+                   aria-label="Versa demo">
+                <source src="assets/demo.mp4" type="video/mp4">
+                <source src="assets/demo.webm" type="video/webm">
+                <img src="assets/demo.gif" alt="Versa demo">
+            </video>
         </div>
     </div>
 </section>

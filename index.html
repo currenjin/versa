@@ -652,12 +652,12 @@ footer {
         </div>
 
         <div class="screenshot">
-            <video autoplay loop muted playsinline preload="auto"
+            <video id="demo-video" autoplay loop muted playsinline preload="auto"
                    poster="assets/screenshots/01-main-ko.png"
                    aria-label="Versa demo">
-                <source src="assets/demo.mp4" type="video/mp4">
-                <source src="assets/demo.webm" type="video/webm">
-                <img src="assets/demo.gif" alt="Versa demo">
+                <source src="assets/demo-ko.mp4" type="video/mp4">
+                <source src="assets/demo-ko.webm" type="video/webm">
+                <img src="assets/demo-ko.gif" alt="Versa demo">
             </video>
         </div>
     </div>
@@ -1003,6 +1003,27 @@ footer {
             setMeta('description', m.desc);
             setMeta('og:title', m.ogTitle, 'property');
             setMeta('og:description', m.ogDesc, 'property');
+        }
+
+        const video = document.getElementById('demo-video');
+        if (video) {
+            const sources = video.querySelectorAll('source');
+            let changed = false;
+            sources.forEach(function (s) {
+                const ext = (s.type || '').split('/')[1] || 'mp4';
+                const next = 'assets/demo-' + lang + '.' + ext;
+                if (!s.getAttribute('src') || !s.getAttribute('src').endsWith(next)) {
+                    s.setAttribute('src', next);
+                    changed = true;
+                }
+            });
+            const fallbackImg = video.querySelector('img');
+            if (fallbackImg) fallbackImg.setAttribute('src', 'assets/demo-' + lang + '.gif');
+            video.setAttribute('poster', 'assets/screenshots/' + (lang === 'en' ? '02-main-en' : '01-main-ko') + '.png');
+            if (changed) {
+                video.load();
+                video.play().catch(function () {});
+            }
         }
     }
 

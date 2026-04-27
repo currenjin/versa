@@ -2,17 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Versa — 지금 이 곡의 가사를, 당신의 언어로</title>
 <meta name="description" content="Mac 메뉴바에서 Spotify · Apple Music 재생곡의 가사를 실시간 싱크로 띄우고 9개 언어로 번역하는 앱.">
+<meta name="author" content="currenjin">
+<meta name="theme-color" content="#08060f">
+
+<link rel="canonical" href="https://currenjin.github.io/versa/">
 
 <meta property="og:title" content="Versa — 메뉴바에서 펼쳐지는 실시간 가사 · 번역">
 <meta property="og:description" content="Spotify · Apple Music 재생곡을 싱크 가사로 띄우고, 곡이 시작되기도 전에 번역을 준비합니다.">
-<meta property="og:image" content="https://currenjin.github.io/versa/assets/icon.png">
+<meta property="og:image" content="https://currenjin.github.io/versa/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Versa — Live lyrics and translation, right in your menu bar.">
+<meta property="og:url" content="https://currenjin.github.io/versa/">
+<meta property="og:site_name" content="Versa">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Versa — Live lyrics & translation, in your menu bar">
+<meta name="twitter:description" content="Synced lyrics for Spotify and Apple Music, pre-translated in 9 languages before the song starts.">
+<meta name="twitter:image" content="https://currenjin.github.io/versa/assets/og-image.png">
 
 <link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
 
 <style>
 :root {
@@ -239,6 +255,13 @@ h1 {
     h1 { font-size: 44px; }
     .hero-lead { font-size: 16px; }
 }
+@media (max-width: 420px) {
+    h1 { font-size: 36px; }
+    .hero { padding: 56px 0 72px; }
+    .meta { font-size: 12px; gap: 8px; }
+    .meta > span:not(:last-child)::after { margin-left: 8px; }
+    .btn { padding: 12px 18px; font-size: 14px; }
+}
 
 .cta {
     display: flex;
@@ -303,6 +326,9 @@ h1 {
     width: 100%;
     height: auto;
     display: block;
+}
+.screenshot video {
+    aspect-ratio: 11 / 8;  /* 880×640 — 미리 공간 예약해 CLS 방지 */
 }
 
 /* ---------------- gallery ---------------- */

@@ -24,9 +24,9 @@ Latest stable build: [`Versa.dmg`](https://github.com/currenjin/versa/releases/l
 
 **Requirements**: macOS 13+ · Apple Silicon (M1 or later)
 
-> Versa isn't Apple-notarized yet, so the first launch needs a one-time **right-click → Open**. After approval, it opens like any other app from Launchpad or Spotlight.
+> Versa isn't Apple-notarized yet. On first launch macOS will block it; open **System Settings → Privacy & Security**, scroll to the *Security* section, and click **Open Anyway**. After this one-time approval, Versa opens normally from Launchpad or Spotlight.
 
-See the [install guide](https://currenjin.github.io/versa/#install) for details.
+See the [install guide](https://currenjin.github.io/versa/#install) for the full step-by-step.
 
 ## Features
 

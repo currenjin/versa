@@ -6,7 +6,7 @@ A Mac menu bar app that shows synced lyrics for whatever's playing on Spotify or
 
 **[Get Versa →](https://currenjin.github.io/versa/)** &nbsp;·&nbsp; **[Latest Release](https://github.com/currenjin/versa/releases/latest)** &nbsp;·&nbsp; **[Issues](https://github.com/currenjin/versa/issues)**
 
-![Versa demo](assets/demo.gif)
+![Versa demo](assets/demo-en.gif)
 
 ## What is this repo?
 
